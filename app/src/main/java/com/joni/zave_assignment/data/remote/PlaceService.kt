@@ -13,9 +13,7 @@ interface PlaceService {
         @Query("radius") radius: Int,           // metres
         @Query("keyword") keyword: String,
         @Query("type") type: String = "store",
-        @Query("key") apiKey: String) : Result<PlacesDto>
-
-
+        @Query("key") apiKey: String) : PlacesDto
 
 }
 

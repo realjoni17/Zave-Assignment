@@ -57,7 +57,12 @@ dependencies {
 
     implementation("com.google.android.libraries.places:places:3.4.0")
 
-    implementation("io.insert-koin:koin-android:4.2.0")
+    implementation (platform("io.insert-koin:koin-bom:4.2.0"))
+
+    // Koin for Android
+    implementation ("io.insert-koin:koin-android")
+
+    implementation ("io.insert-koin:koin-androidx-compose")
 
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.okhttp3:okhttp:5.0.0")
@@ -72,4 +77,6 @@ dependencies {
 
     implementation("io.coil-kt.coil3:coil-compose:3.4.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.4.0")
+
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 }
