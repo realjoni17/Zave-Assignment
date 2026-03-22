@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hotswan.compiler)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -18,6 +19,19 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+            buildConfigField(
+                "String",
+                "apiKey",
+                "\"${project.findProperty("apiKey")}\""
+            )
+        buildConfigField(
+            "String",
+            "web",
+            "\"${project.findProperty("web")}\""
+        )
+
     }
 
     buildTypes {
@@ -34,6 +48,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
@@ -47,6 +62,12 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.firebase.config)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -79,4 +100,8 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.4.0")
 
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    implementation ("com.google.android.gms:play-services-auth:20.7.0")
+
+   // implementation("androidx.navigation:navigation-compose:2.9.7")
 }
