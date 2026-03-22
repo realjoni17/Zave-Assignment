@@ -8,10 +8,13 @@ import com.joni.zave_assignment.data.dao.UserDetailsDao
 import com.joni.zave_assignment.data.database.ZaveDatabase
 import com.joni.zave_assignment.data.remote.PlaceService
 import com.joni.zave_assignment.data.repositories.FirebaseAuthRepositoryImpl
+import com.joni.zave_assignment.data.repositories.LocationRepositoryImpl
 import com.joni.zave_assignment.data.repositories.NearbySearchRepositoryImpl
 import com.joni.zave_assignment.domain.repositories.FirebaseAuthRepository
+import com.joni.zave_assignment.domain.repositories.LocationRepository
 import com.joni.zave_assignment.domain.repositories.NearbySearchRepository
 import com.joni.zave_assignment.ui.viewModels.FirebaseAuthViewModel
+import com.joni.zave_assignment.ui.viewModels.LocationViewModel
 import com.joni.zave_assignment.ui.viewModels.PlacesViewModel
 import okhttp3.OkHttpClient
 import org.koin.core.module.dsl.viewModel
@@ -28,10 +31,12 @@ val module = module {
 
   single<NearbySearchRepository> { NearbySearchRepositoryImpl(get()) }
   single<FirebaseAuthRepository>{ FirebaseAuthRepositoryImpl(get(),get()) }
+    single<LocationRepository>{ LocationRepositoryImpl(get(),get()) }
 
 
     viewModel { PlacesViewModel(get()) }
     viewModel { FirebaseAuthViewModel(get()) }
+    viewModel { LocationViewModel(get()) }
 }
 
 //fun providesOkHttpClient() : OkHttpClient = OkHttpClient.Builder().addInterceptor()
@@ -43,8 +48,8 @@ fun providePlacesApi(): PlaceService = Retrofit.Builder()
     .build()
     .create(PlaceService::class.java)
 
-fun provideDataBase( context : Context) : ZaveDatabase =Room.databaseBuilder(
-             context, ZaveDatabase::class.java, "zave_db"
-).fallbackToDestructiveMigration().build()
+fun provideDataBase( context : Context) : ZaveDatabase = Room.databaseBuilder(
+    context, ZaveDatabase::class.java, "zave_db"
+).fallbackToDestructiveMigration(false).build()
 
 fun provideUserDetailsDao(db : ZaveDatabase) : UserDetailsDao = db.userDetailsDao()
