@@ -7,6 +7,7 @@ import com.joni.zave_assignment.domain.models.Place
 import com.joni.zave_assignment.domain.models.UserLocation
 
 import com.joni.zave_assignment.domain.repositories.NearbySearchRepository
+import com.joni.zave_assignment.domain.repositories.RemoteConfigRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -29,11 +30,12 @@ data class SearchResultsUiState(
     val userLocation: UserLocation? = null
 )
 
-class SearchScreenViewModel(private val placesRepository : NearbySearchRepository) : ViewModel() {
+class SearchScreenViewModel(private val placesRepository : NearbySearchRepository,
+                            private val remoteConfigRepository: RemoteConfigRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<SearchResultsUiState>(SearchResultsUiState())
     val uiState: StateFlow<SearchResultsUiState> = _uiState
-
 
     fun loadResults(
         query: String,
@@ -57,7 +59,7 @@ class SearchScreenViewModel(private val placesRepository : NearbySearchRepositor
 
         // Fetch fresh from network
         viewModelScope.launch {
-            val radiusKm = customRadiusKm ?: 300 //remoteConfigRepository.getValues().defaultRadiusKm
+            val radiusKm = customRadiusKm ?: remoteConfigRepository.getValues().defaultRadiusKm
             when (val result = placesRepository.getNearbyPlaces(lat, lng, radiusKm * 1000, query)) {
                 is Result.Success -> {
                     val sorted = result.data.withDistances(location)
@@ -75,7 +77,7 @@ class SearchScreenViewModel(private val placesRepository : NearbySearchRepositor
 
     private fun List<Place>.withDistances(origin: UserLocation): List<Place> =
         map { store ->
-            store.copy(distanceMeters = haversineMeters(origin.lat, origin.lng, store.lat, store.lng))
+            store.copy(distanceMeters = store.lat?.let { store.lng?.let { lon2 -> haversineMeters(origin.lat, origin.lng, it, lon2) } })
         }.sortedBy { it.distanceMeters }
 
     private fun haversineMeters(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Float {
@@ -87,5 +89,4 @@ class SearchScreenViewModel(private val placesRepository : NearbySearchRepositor
                 sin(dLon / 2).let { it * it }
         return (2 * r * atan2(sqrt(a), sqrt(1 - a))).toFloat()
     }
-
 }

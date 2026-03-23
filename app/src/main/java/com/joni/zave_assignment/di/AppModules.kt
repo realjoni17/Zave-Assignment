@@ -71,6 +71,6 @@ fun provideCachedStoreDao(db : ZaveDatabase) : CachedStoreDao = db.cachedStoreDa
 
 
 fun provideRemoteConfig(): FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance().also { rc ->
-    rc.setConfigSettingsAsync(remoteConfigSettings { minimumFetchIntervalInSeconds = 3600 })
+    rc.setConfigSettingsAsync(remoteConfigSettings { minimumFetchIntervalInSeconds = 5 })
     rc.setDefaultsAsync(R.xml.remote_config_defaults)
 }

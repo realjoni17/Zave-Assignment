@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-</PreferenceScreen>
+<defaultsMap>
+    <entry>
+        <key>default_radius_km</key>
+        <value>3</value>
+    </entry>
+    <entry>
+        <key>featured_category</key>
+        <value>electronics</value>
+    </entry>
+    <entry>
+        <key>banner_message</key>
+        <value>Explore deals near you!</value>
+    </entry>
+</defaultsMap>

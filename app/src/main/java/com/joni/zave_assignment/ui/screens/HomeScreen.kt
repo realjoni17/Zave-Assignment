@@ -31,16 +31,17 @@ import coil3.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.joni.zave_assignment.domain.models.UserLocation
+import com.joni.zave_assignment.ui.theme.DividerColor
+import com.joni.zave_assignment.ui.theme.SlateGray
+import com.joni.zave_assignment.ui.theme.SurfaceGray
+import com.joni.zave_assignment.ui.theme.Teal500
+import com.joni.zave_assignment.ui.theme.Teal600
+import com.joni.zave_assignment.ui.theme.TextPrimary
 import com.joni.zave_assignment.ui.viewModels.HomeUiState
 
 
 // ── Brand colours (Figma) ────────────────────────────────────────────────────
-private val Teal500     = Color(0xFF06B6A4)
-private val Teal600     = Color(0xFF0D9488)
-private val SlateGray   = Color(0xFF94A3B8)
-private val SurfaceGray = Color(0xFFF1F5F7)
-private val TextPrimary = Color(0xFF0F1720)
-private val DividerColor = Color.Black.copy(alpha = 0.08f)
+
 
 
 @OptIn(ExperimentalPermissionsApi::class)

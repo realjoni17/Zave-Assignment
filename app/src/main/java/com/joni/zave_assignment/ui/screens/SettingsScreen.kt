@@ -1,609 +1,347 @@
-package com.joni.zave_assignment.ui.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Badge
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.joni.zave_assignment.R
+import coil3.compose.AsyncImage
+import com.joni.zave_assignment.ui.theme.DividerColor
+import com.joni.zave_assignment.ui.theme.ErrorRed
+import com.joni.zave_assignment.ui.theme.OverrideBadge
+import com.joni.zave_assignment.ui.theme.Teal500
+import com.joni.zave_assignment.ui.theme.TealLight
+import com.joni.zave_assignment.ui.theme.TextMuted
+import com.joni.zave_assignment.ui.theme.TextPrimary
+import com.joni.zave_assignment.ui.theme.ValueGreen
 
+import com.joni.zave_assignment.ui.viewModels.SettingsUiState
+
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Container1(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .requiredWidth(width = 375.dp)
-            .padding(bottom = 63.dp)
-    ) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.Top),
+fun SettingsScreen(
+    state: SettingsUiState,
+    onRadiusChange: (Int?) -> Unit,
+    onAutoLocationChange: (Boolean) -> Unit,
+    onSignOut: () -> Unit,
+    onBack: () -> Unit
+) {
+    var showSignOutDialog by remember { mutableStateOf(false) }
+    val radiusSliderValue = (state.customRadiusKm ?: state.remoteConfig.defaultRadiusKm).toFloat()
+    val isOverridden = state.customRadiusKm != null
+
+    if (showSignOutDialog) {
+        AlertDialog(
+            onDismissRequest = { showSignOutDialog = false },
+            title = { Text("Sign out?") },
+            text = { Text("You'll need to sign in again to search for stores.") },
+            confirmButton = {
+                TextButton(onClick = { showSignOutDialog = false; onSignOut() }) {
+                    Text("Sign out", color = ErrorRed)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSignOutDialog = false }) { Text("Cancel") }
+            }
+        )
+    }
+
+    Scaffold(
+        containerColor = Color(0xFFF7FBF9),
+        topBar = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFFF7FBF9))
+                    .padding(horizontal = 16.dp, vertical = 14.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(TealLight)
+                        .clickable { onBack() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back", Modifier.size(18.dp), tint = Color(0xFF05524A))
+                }
+                Text("Settings", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+            }
+        }
+    ) { padding ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp,
-                    end = 16.dp,
-                    top = 16.dp,
-                    bottom = 32.dp)
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            item {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 8.dp)
-                    ) {
-                        Text(
-                            text = "ACCOUNT",
-                            color = Color(0xff6b7280),
-                            style = TextStyle(
-                                fontSize = 13.sp,
-                                letterSpacing = 0.5.sp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight(align = Alignment.CenterVertically))
-                    }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(8.dp))
-                            .background(color = Color.White)
-                            .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.08f)),
-                                shape = RoundedCornerShape(8.dp))
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(85.39.dp, Alignment.Start),
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(all = 16.dp)
-                        ) {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                                    contentDescription = "avatar%2Ffemale%2F25-35%2FHispanic%2F0",
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .requiredSize(size = 40.dp)
-                                        .clip(shape = RoundedCornerShape(20.dp)))
-                                Column(
-                                    verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                    ) {
-                                        Text(
-                                            text = "Maria Garcia",
-                                            color = Color(0xff0f1722),
-                                            style = TextStyle(
-                                                fontSize = 16.sp,
-                                                fontWeight = FontWeight.Medium),
-                                            modifier = Modifier
-                                                .requiredWidth(width = 97.dp)
-                                                .requiredHeight(height = 20.dp)
-                                                .wrapContentHeight(align = Alignment.CenterVertically))
-                                    }
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                    ) {
-                                        Text(
-                                            text = "maria.garcia@gmail.com",
-                                            color = Color(0xff6b7280),
-                                            style = TextStyle(
-                                                fontSize = 13.sp),
-                                            modifier = Modifier
-                                                .requiredWidth(width = 152.dp)
-                                                .requiredHeight(height = 16.dp)
-                                                .wrapContentHeight(align = Alignment.CenterVertically))
-                                    }
-                                }
-                            }
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .requiredSize(size = 20.dp)
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                                    contentDescription = "SVG",
-                                    modifier = Modifier
-                                        .requiredSize(size = 20.dp))
-                            }
-                        }
-                    }
-                }
-            }
-            item {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 8.dp)
-                    ) {
-                        Text(
-                            text = "LOCATION PREFERENCES",
-                            color = Color(0xff6b7280),
-                            style = TextStyle(
-                                fontSize = 13.sp,
-                                letterSpacing = 0.5.sp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight(align = Alignment.CenterVertically))
-                    }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(8.dp))
-                            .background(color = Color.White)
-                            .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.08f)),
-                                shape = RoundedCornerShape(8.dp))
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(59.37.dp, Alignment.Start),
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(all = 16.dp)
-                        ) {
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                ) {
-                                    Text(
-                                        text = "Use location automatically",
-                                        color = Color(0xff0f1722),
-                                        style = TextStyle(
-                                            fontSize = 16.sp,
-                                            fontWeight = FontWeight.Medium),
-                                        modifier = Modifier
-                                            .requiredWidth(width = 202.dp)
-                                            .requiredHeight(height = 20.dp)
-                                            .wrapContentHeight(align = Alignment.CenterVertically))
-                                }
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                ) {
-                                    Text(
-                                        text = "Requires GPS access",
-                                        color = Color(0xff6b7280),
-                                        style = TextStyle(
-                                            fontSize = 13.sp),
-                                        modifier = Modifier
-                                            .requiredWidth(width = 131.dp)
-                                            .requiredHeight(height = 16.dp)
-                                            .wrapContentHeight(align = Alignment.CenterVertically))
-                                }
-                            }
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .requiredWidth(width = 48.dp)
-                                    .requiredHeight(height = 28.dp)
-                                    .clip(shape = RoundedCornerShape(14.dp))
-                                    .background(color = Color(0xff00b894))
-                                    .padding(start = 22.dp,
-                                        end = 2.dp,
-                                        top = 2.dp,
-                                        bottom = 2.dp)
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .requiredSize(size = 24.dp)
-                                        .clip(shape = RoundedCornerShape(12.dp))
-                                        .background(color = Color.White)
-                                        .shadow(elevation = 2.dp,
-                                            shape = RoundedCornerShape(12.dp)))
-                            }
-                        }
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(all = 16.dp)
-                        ) {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(78.75.dp, Alignment.Start),
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
-                                Column(
-                                    verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                    ) {
-                                        Column() {
-                                            Text(
-                                                text = "Search radius",
-                                                color = Color(0xff0f1722),
-                                                style = TextStyle(
-                                                    fontSize = 16.sp,
-                                                    fontWeight = FontWeight.Medium),
-                                                modifier = Modifier
-                                                    .requiredWidth(width = 105.dp)
-                                                    .requiredHeight(height = 20.dp)
-                                                    .wrapContentHeight(align = Alignment.CenterVertically))
-                                        }
-                                        Column(
-                                            modifier = Modifier
-                                                .padding(start = 8.dp)
-                                        ) {
-                                            Row(
-                                                verticalAlignment = Alignment.CenterVertically,
-                                                modifier = Modifier
-                                                    .clip(shape = MaterialTheme.shapes.small)
-                                                    .background(color = Color(0xfff59e0b))
-                                                    .padding(horizontal = 6.dp,
-                                                        vertical = 2.dp)
-                                            ) {
-                                                Text(
-                                                    text = "OVERRIDDEN",
-                                                    color = Color(0xff0f1722),
-                                                    style = TextStyle(
-                                                        fontSize = 10.sp,
-                                                        fontWeight = FontWeight.Bold),
-                                                    modifier = Modifier
-                                                        .requiredWidth(width = 65.dp)
-                                                        .requiredHeight(height = 12.dp)
-                                                        .wrapContentHeight(align = Alignment.CenterVertically))
-                                            }
-                                        }
-                                    }
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                    ) {
-                                        Text(
-                                            text = "Manual override applied",
-                                            color = Color(0xff6b7280),
-                                            style = TextStyle(
-                                                fontSize = 13.sp),
-                                            modifier = Modifier
-                                                .requiredWidth(width = 148.dp)
-                                                .requiredHeight(height = 16.dp)
-                                                .wrapContentHeight(align = Alignment.CenterVertically))
-                                    }
-                                }
-                                Column() {
-                                    Text(
-                                        text = "10 mi",
-                                        color = Color(0xff00b894),
-                                        style = TextStyle(
-                                            fontSize = 16.sp),
-                                        modifier = Modifier
-                                            .requiredWidth(width = 40.dp)
-                                            .requiredHeight(height = 20.dp)
-                                            .wrapContentHeight(align = Alignment.CenterVertically))
-                                }
-                            }
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .requiredHeight(height = 22.dp)
-                                    .padding(vertical = 8.dp)
-                            ) {
-                                TextField(
-                                    value = "",
-                                    onValueChange = {},
-                                   /* colors = TextFieldDefaults.textFieldColors(
-                                        containerColor = Color(0xfff1f5f6)),*/
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .requiredHeight(height = 6.dp)
-                                        .clip(shape = RoundedCornerShape(3.dp)))
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .requiredHeight(height = 7.dp)
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(255.25.dp, Alignment.Start),
-                                    modifier = Modifier
-                                        .align(alignment = Alignment.TopStart)
-                                        .offset(x = 0.dp,
-                                            y = (-8).dp)
-                                        .fillMaxWidth()
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                    ) {
-                                        Text(
-                                            text = "1 mi",
-                                            color = Color(0xff6b7280),
-                                            style = TextStyle(
-                                                fontSize = 12.sp,
-                                                fontWeight = FontWeight.Medium),
-                                            modifier = Modifier
-                                                .requiredWidth(width = 22.dp)
-                                                .requiredHeight(height = 15.dp)
-                                                .wrapContentHeight(align = Alignment.CenterVertically))
-                                    }
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                    ) {
-                                        Text(
-                                            text = "50 mi",
-                                            color = Color(0xff6b7280),
-                                            style = TextStyle(
-                                                fontSize = 12.sp,
-                                                fontWeight = FontWeight.Medium),
-                                            modifier = Modifier
-                                                .requiredWidth(width = 32.dp)
-                                                .requiredHeight(height = 15.dp)
-                                                .wrapContentHeight(align = Alignment.CenterVertically))
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            item {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 8.dp)
-                    ) {
-                        Text(
-                            text = "REMOTE CONFIG (DEBUG)",
-                            color = Color(0xff6b7280),
-                            style = TextStyle(
-                                fontSize = 13.sp,
-                                letterSpacing = 0.5.sp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight(align = Alignment.CenterVertically))
-                    }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(8.dp))
-                            .background(color = Color.White)
-                            .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.08f)),
-                                shape = RoundedCornerShape(8.dp))
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(129.58.dp, Alignment.Start),
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp,
-                                    vertical = 12.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(top = 1.dp,
-                                        bottom = 2.dp)
-                            ) {
-                                Text(
-                                    text = "default_search_radius",
-                                    color = Color(0xff6b7280),
-                                    style = TextStyle(
-                                        fontSize = 13.sp),
-                                    modifier = Modifier
-                                        .requiredWidth(width = 164.dp)
-                                        .requiredHeight(height = 13.dp)
-                                        .wrapContentHeight(align = Alignment.CenterVertically))
-                            }
-                            Badge(
-                                contentColor = Color(0xfff59e0b)
-                            ) {
-                                Text(
-                                    text = "badgeNumber")
-                            }
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.78.dp, Alignment.Start),
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp,
-                                    vertical = 12.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(top = 1.dp,
-                                        bottom = 2.dp)
-                            ) {
-                                Text(
-                                    text = "featured_banner_id",
-                                    color = Color(0xff6b7280),
-                                    style = TextStyle(
-                                        fontSize = 13.sp),
-                                    modifier = Modifier
-                                        .requiredWidth(width = 140.dp)
-                                        .requiredHeight(height = 13.dp)
-                                        .wrapContentHeight(align = Alignment.CenterVertically))
-                            }
-                            Column(
-                                modifier = Modifier
-                                    .padding(top = 1.dp,
-                                        bottom = 2.dp)
-                            ) {
-                                Text(
-                                    text = "promo_banner_spring",
-                                    color = Color(0xff16a34a),
-                                    style = TextStyle(
-                                        fontSize = 13.sp,
-                                        fontWeight = FontWeight.Bold),
-                                    modifier = Modifier
-                                        .requiredWidth(width = 164.dp)
-                                        .requiredHeight(height = 13.dp)
-                                        .wrapContentHeight(align = Alignment.CenterVertically))
-                            }
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(176.39.dp, Alignment.Start),
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp,
-                                    vertical = 12.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(top = 1.dp,
-                                        bottom = 2.dp)
-                            ) {
-                                Text(
-                                    text = "enable_new_ui",
-                                    color = Color(0xff6b7280),
-                                    style = TextStyle(
-                                        fontSize = 13.sp),
-                                    modifier = Modifier
-                                        .requiredWidth(width = 101.dp)
-                                        .requiredHeight(height = 13.dp)
-                                        .wrapContentHeight(align = Alignment.CenterVertically))
-                            }
-                            Column(
-                                modifier = Modifier
-                                    .padding(top = 1.dp,
-                                        bottom = 2.dp)
-                            ) {
-                                Text(
-                                    text = "true",
-                                    color = Color(0xff00b894),
-                                    style = TextStyle(
-                                        fontSize = 13.sp,
-                                        fontWeight = FontWeight.Bold),
-                                    modifier = Modifier
-                                        .requiredWidth(width = 31.dp)
-                                        .requiredHeight(height = 13.dp)
-                                        .wrapContentHeight(align = Alignment.CenterVertically))
-                            }
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(168.57.dp, Alignment.Start),
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp,
-                                    vertical = 12.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(top = 1.dp,
-                                        bottom = 2.dp)
-                            ) {
-                                Text(
-                                    text = "min_app_version",
-                                    color = Color(0xff6b7280),
-                                    style = TextStyle(
-                                        fontSize = 13.sp),
-                                    modifier = Modifier
-                                        .requiredWidth(width = 117.dp)
-                                        .requiredHeight(height = 13.dp)
-                                        .wrapContentHeight(align = Alignment.CenterVertically))
-                            }
-                            Badge(
-                                contentColor = Color(0xfff59e0b)
-                            ) {
-                                Text(
-                                    text = "badgeNumber")
-                            }
-                        }
-                    }
-                }
-            }
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp)
+
+            // ── ACCOUNT ──────────────────────────────────────────────────
+            SettingsSectionLabel("ACCOUNT")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.White)
+                    .border(BorderStroke(1.dp, DividerColor), RoundedCornerShape(8.dp))
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth().padding(16.dp)
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(8.dp))
-                            .background(color = Color.White)
-                            .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.08f)),
-                                shape = RoundedCornerShape(8.dp))
-                            .padding(all = 16.dp)
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Sign Out",
-                            color = Color(0xffef4444),
-                            textAlign = TextAlign.Center,
-                            style = TextStyle(
-                                fontSize = 16.sp),
-                            modifier = Modifier
-                                .requiredWidth(width = 66.dp)
-                                .requiredHeight(height = 20.dp)
-                                .wrapContentHeight(align = Alignment.CenterVertically))
+                        Box(
+                            modifier = Modifier.size(40.dp).clip(CircleShape).background(TealLight),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (state.photoUrl != null) {
+                                AsyncImage(
+                                    model = state.photoUrl,
+                                    contentDescription = "Avatar",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize().clip(CircleShape)
+                                )
+                            } else {
+                                Text(
+                                    text = state.displayName.firstOrNull()?.uppercaseChar()?.toString() ?: "U",
+                                    color = Teal500,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp
+                                )
+                            }
+                        }
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(
+                                state.displayName.ifBlank { "User" },
+                                color = TextPrimary,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(state.email, color = TextMuted, fontSize = 13.sp)
+                        }
                     }
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = TextMuted
+                    )
+                }
+            }
+
+            // ── LOCATION PREFERENCES ─────────────────────────────────────
+            SettingsSectionLabel("LOCATION PREFERENCES")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.White)
+                    .border(BorderStroke(1.dp, DividerColor), RoundedCornerShape(8.dp))
+            ) {
+                // Auto location toggle row
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("Use location automatically", color = TextPrimary, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                        Text("Requires GPS access", color = TextMuted, fontSize = 13.sp)
+                    }
+                    // Figma-style toggle
+                    Box(
+                        modifier = Modifier
+                            .width(48.dp)
+                            .height(28.dp)
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(if (state.useAutoLocation) Teal500 else Color(0xFFD1D5DB))
+                            .clickable { onAutoLocationChange(!state.useAutoLocation) }
+                            .padding(2.dp),
+                        contentAlignment = if (state.useAutoLocation) Alignment.CenterEnd else Alignment.CenterStart
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clip(CircleShape)
+                                .background(Color.White)
+                        )
+                    }
+                }
+
+                HorizontalDivider(color = DividerColor)
+
+                // Search radius slider row
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("Search radius", color = TextPrimary, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                                if (isOverridden) {
+                                    Box(
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(4.dp))
+                                            .background(OverrideBadge)
+                                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                                    ) {
+                                        Text("OVERRIDDEN", color = TextPrimary, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                                    }
+                                }
+                            }
+                            Text(
+                                if (isOverridden) "Manual override applied" else "From Remote Config",
+                                color = TextMuted, fontSize = 13.sp
+                            )
+                        }
+                        Text(
+                            "${radiusSliderValue.toInt()} km",
+                            color = Teal500, fontSize = 16.sp
+                        )
+                    }
+
+                    Slider(
+                        value = radiusSliderValue,
+                        onValueChange = { onRadiusChange(it.toInt()) },
+                        valueRange = 1f..50f,
+                        steps = 48,
+                        colors = SliderDefaults.colors(
+                            thumbColor = Teal500,
+                            activeTrackColor = Teal500,
+                            inactiveTrackColor = Color(0xFFF1F5F6)
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("1 km", color = TextMuted, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                        if (isOverridden) {
+                            Text(
+                                "Reset to default",
+                                color = Teal500,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.clickable { onRadiusChange(null) }
+                            )
+                        }
+                        Text("50 km", color = TextMuted, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                    }
+                }
+            }
+
+            // ── REMOTE CONFIG (DEBUG) ─────────────────────────────────────
+            SettingsSectionLabel("REMOTE CONFIG (DEBUG)")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.White)
+                    .border(BorderStroke(1.dp, DividerColor), RoundedCornerShape(8.dp))
+            ) {
+                RemoteConfigRow(
+                    key = "default_radius_km",
+                    value = "${state.remoteConfig.defaultRadiusKm}",
+                    valueColor = OverrideBadge
+                )
+                HorizontalDivider(color = DividerColor)
+                RemoteConfigRow(
+                    key = "featured_category",
+                    value = state.remoteConfig.featuredCategory,
+                    valueColor = ValueGreen
+                )
+                HorizontalDivider(color = DividerColor)
+                RemoteConfigRow(
+                    key = "banner_message",
+                    value = state.remoteConfig.bannerMessage,
+                    valueColor = ValueGreen
+                )
+            }
+
+            // ── SIGN OUT ──────────────────────────────────────────────────
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.White)
+                    .border(BorderStroke(1.dp, DividerColor), RoundedCornerShape(8.dp))
+                    .clickable(enabled = !state.isSigningOut) { showSignOutDialog = true }
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                if (state.isSigningOut) {
+                    CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp, color = ErrorRed)
+                } else {
+                    Text(
+                        text = "Sign Out",
+                        color = ErrorRed,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
     }
 }
 
-@Preview(widthDp = 375, heightDp = 764)
 @Composable
-private fun ContainerPreview() {
-    Container1(Modifier)
+private fun SettingsSectionLabel(title: String) {
+    Text(
+        text = title,
+        color = TextMuted,
+        fontSize = 13.sp,
+        letterSpacing = 0.5.sp,
+        modifier = Modifier.padding(start = 8.dp)
+    )
+}
+
+@Composable
+private fun RemoteConfigRow(key: String, value: String, valueColor: Color) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
+        Text(key, color = TextMuted, fontSize = 13.sp)
+        Text(value, color = valueColor, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+    }
 }
