@@ -58,7 +58,7 @@ This is an Android app built with Jetpack Compose for the Zave assignment.
 
 |            Screen 4            |
 |:------------------------------:|
-| <img src = "/assets/img5.jpg"> | 
+| <img src = "/assets/img4.jpg"> | 
 
 ![Flow of App](assets/gif.gif)
 
@@ -66,4 +66,4 @@ This is an Android app built with Jetpack Compose for the Zave assignment.
 [To download the app click here](assets/app-debug.apk)
 
 ## Firebase Console
-<img src = "/assets/img1.jpg">
+<img src = "/assets/img5.jpg">
