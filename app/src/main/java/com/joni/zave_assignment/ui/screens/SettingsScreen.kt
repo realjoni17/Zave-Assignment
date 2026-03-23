@@ -100,7 +100,7 @@ fun SettingsScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
 
-            // ── ACCOUNT ──────────────────────────────────────────────────
+
             SettingsSectionLabel("ACCOUNT")
             Column(
                 modifier = Modifier
@@ -157,7 +157,7 @@ fun SettingsScreen(
                 }
             }
 
-            // ── LOCATION PREFERENCES ─────────────────────────────────────
+
             SettingsSectionLabel("LOCATION PREFERENCES")
             Column(
                 modifier = Modifier
@@ -166,7 +166,7 @@ fun SettingsScreen(
                     .background(Color.White)
                     .border(BorderStroke(1.dp, DividerColor), RoundedCornerShape(8.dp))
             ) {
-                // Auto location toggle row
+
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -176,7 +176,7 @@ fun SettingsScreen(
                         Text("Use location automatically", color = TextPrimary, fontSize = 16.sp, fontWeight = FontWeight.Medium)
                         Text("Requires GPS access", color = TextMuted, fontSize = 13.sp)
                     }
-                    // Figma-style toggle
+
                     Box(
                         modifier = Modifier
                             .width(48.dp)
@@ -198,7 +198,7 @@ fun SettingsScreen(
 
                 HorizontalDivider(color = DividerColor)
 
-                // Search radius slider row
+
                 Column(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxWidth().padding(16.dp)
@@ -268,7 +268,7 @@ fun SettingsScreen(
                 }
             }
 
-            // ── REMOTE CONFIG (DEBUG) ─────────────────────────────────────
+
             SettingsSectionLabel("REMOTE CONFIG (DEBUG)")
             Column(
                 modifier = Modifier
@@ -296,7 +296,7 @@ fun SettingsScreen(
                 )
             }
 
-            // ── SIGN OUT ──────────────────────────────────────────────────
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

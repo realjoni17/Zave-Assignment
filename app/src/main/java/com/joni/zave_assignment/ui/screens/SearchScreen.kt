@@ -84,7 +84,7 @@ fun SearchResultsScreen(
         containerColor = BgSurface,
         topBar = {
             Column {
-                // Header row — Figma Header1
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -128,7 +128,7 @@ fun SearchResultsScreen(
                     }
                 }
 
-                // Filter chips — Figma HorizontalBorder
+
                 val filters = listOf("Nearest", "Top Rated", "Open Now", "Offers Delivery")
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 16.dp),
@@ -158,7 +158,7 @@ fun SearchResultsScreen(
                     }
                 }
 
-                // Offline banner
+
                 if (state.isOffline) {
                     Row(
                         modifier = Modifier

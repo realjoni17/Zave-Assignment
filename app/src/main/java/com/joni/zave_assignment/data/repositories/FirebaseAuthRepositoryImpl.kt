@@ -39,5 +39,6 @@ class FirebaseAuthRepositoryImpl(private val auth : FirebaseAuth, private val us
 
     override suspend fun signOut() {
         auth.signOut()
+        userDetailsDao.clear()
     }
 }

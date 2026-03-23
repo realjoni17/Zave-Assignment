@@ -1,5 +1,6 @@
 
 import android.app.Activity
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -28,6 +29,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.joni.zave_assignment.BuildConfig
 import com.joni.zave_assignment.R
+import com.joni.zave_assignment.ui.theme.Teal500
+import com.joni.zave_assignment.ui.theme.TextMuted
+import com.joni.zave_assignment.ui.theme.TextPrimary
 import com.joni.zave_assignment.ui.viewModels.AuthUiState
 
 
@@ -53,7 +57,7 @@ fun AuthScreen(
                 val account = task.getResult(ApiException::class.java)
                 account.idToken?.let { onGoogleSignIn(it) }
             } catch (e: ApiException) {
-                // Handled via state
+                Log.d("TAG", "AuthScreen: ${e.message}")
             }
         }
     }
@@ -69,26 +73,23 @@ fun AuthScreen(
         }
     }
 
-    // ── Brand colours (Figma) ────────────────────────────────────────────────
-    val Teal500      = Color(0xFF0EA5A4)
-    val TextPrimary  = Color(0xFF0F1724)
-    val TextMuted    = Color(0xFF6B7280)
+
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF7FBF9))
     ) {
-        // ── Upper content: illustration + copy ───────────────────────────
+
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 220.dp)           // leave room for bottom sheet
+                .padding(bottom = 220.dp)
                 .padding(horizontal = 24.dp)
         ) {
-            // App icon card (replaces illustration placeholder)
+
             Surface(
                 shape = RoundedCornerShape(12.dp),
                 shadowElevation = 32.dp,
@@ -131,7 +132,7 @@ fun AuthScreen(
             )
         }
 
-        // ── Bottom sheet panel ────────────────────────────────────────────
+
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
@@ -141,7 +142,7 @@ fun AuthScreen(
                 .background(Color.White)
                 .padding(horizontal = 24.dp, vertical = 40.dp)
         ) {
-            // Sign-in button
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
@@ -174,7 +175,7 @@ fun AuthScreen(
                 )
             }
 
-            // T&C line
+
             Text(
                 textAlign = TextAlign.Center,
                 text = buildAnnotatedString {
@@ -189,7 +190,7 @@ fun AuthScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Error card
+
             AnimatedVisibility(visible = state.error != null) {
                 state.error?.let { error ->
                     Row(

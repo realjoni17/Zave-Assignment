@@ -40,7 +40,7 @@ import com.joni.zave_assignment.ui.theme.TextPrimary
 import com.joni.zave_assignment.ui.viewModels.HomeUiState
 
 
-// ── Brand colours (Figma) ────────────────────────────────────────────────────
+
 
 
 
@@ -151,7 +151,7 @@ fun HomeScreen(
                 }
             }
 
-            // ── Banner (Remote Config) ────────────────────────────────────────
+
             item {
                 if (state.remoteConfig.bannerMessage.isNotBlank()) {
                     Box(
@@ -196,7 +196,7 @@ fun HomeScreen(
                 }
             }
 
-            // ── Search bar + CTA ─────────────────────────────────────────────
+
             item {
                 Column(
                     modifier = Modifier
@@ -311,7 +311,7 @@ fun HomeScreen(
                 }
             }
 
-            // ── Featured category chip ────────────────────────────────────────
+
             item {
                 Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
                     Box(
@@ -335,7 +335,7 @@ fun HomeScreen(
                 }
             }
 
-            // ── Recent searches ───────────────────────────────────────────────
+
             if (state.recentSearches.isNotEmpty()) {
                 item {
                     Row(

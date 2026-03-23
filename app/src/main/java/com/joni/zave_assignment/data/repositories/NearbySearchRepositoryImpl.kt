@@ -75,7 +75,7 @@ class NearbySearchRepositoryImpl(
     }
 
     private fun Place.toEntity(query: String) = CachedStoreEntity(
-        placeId = placeId,
+        placeId = placeId!!,
         name = name,
         address = address,
         lat = lat,
