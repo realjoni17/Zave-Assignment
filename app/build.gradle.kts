@@ -107,4 +107,6 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.9.7")
     implementation("com.google.accompanist:accompanist-permissions:0.21.1-beta")
+    implementation(libs.play.services.maps)
+    implementation(libs.maps.compose)
 }

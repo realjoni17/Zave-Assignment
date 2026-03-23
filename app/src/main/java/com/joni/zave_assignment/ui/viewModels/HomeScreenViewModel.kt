@@ -2,12 +2,16 @@ package com.joni.zave_assignment.ui.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joni.zave_assignment.domain.models.RemoteConfigValues
 import com.joni.zave_assignment.domain.models.SearchQuery
 import com.joni.zave_assignment.domain.models.UserLocation
 import com.joni.zave_assignment.domain.repositories.LocationRepository
 import com.joni.zave_assignment.domain.repositories.NearbySearchRepository
+import com.joni.zave_assignment.domain.repositories.RemoteConfigRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.joni.zave_assignment.utils.Result as Result
@@ -16,7 +20,7 @@ import com.joni.zave_assignment.utils.Result as Result
 data class HomeUiState(
     val searchQuery: String = "",
     val recentSearches: List<SearchQuery> = emptyList(),
-   // val remoteConfig: RemoteConfigValues = RemoteConfigValues(),
+    val remoteConfig: RemoteConfigValues = RemoteConfigValues(),
     val location: UserLocation? = null,
     val isLocating: Boolean = false,
     val locationError: String? = null,
@@ -25,24 +29,25 @@ data class HomeUiState(
 )
 
 class HomeScreenViewModel(private val locationRepository: LocationRepository,
-    private  val placesRepository: NearbySearchRepository) : ViewModel(){
+    private  val placesRepository: NearbySearchRepository,
+                          private val remoteConfigRepository: RemoteConfigRepository) : ViewModel(){
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
-      //  loadRemoteConfig()
-        //observeRecentSearches()
+        loadRemoteConfig()
+        observeRecentSearches()
     }
 
-/*    private fun loadRemoteConfig() {
+   private fun loadRemoteConfig() {
         viewModelScope.launch {
             remoteConfigRepository.fetchAndActivate()
             _uiState.update { it.copy(remoteConfig = remoteConfigRepository.getValues()) }
         }
-    }*/
+    }
 
- /*   private fun observeRecentSearches() {
+   private fun observeRecentSearches() {
         placesRepository.getRecentSearches()
             .onEach { entities ->
                 _uiState.update { state ->
@@ -50,7 +55,7 @@ class HomeScreenViewModel(private val locationRepository: LocationRepository,
                 }
             }
             .launchIn(viewModelScope)
-    }*/
+    }
 
     fun onSearchQueryChange(query: String) = _uiState.update { it.copy(searchQuery = query) }
 

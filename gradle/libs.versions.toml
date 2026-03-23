@@ -16,6 +16,8 @@ googleid = "1.2.0"
 firebaseConfig = "23.0.1"
 firebaseFirestore = "26.1.2"
 playServicesLocation = "21.3.0"
+playServicesMaps = "19.0.0"
+mapsCompose = "4.4.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,6 +42,8 @@ firebase-config = { group = "com.google.firebase", name = "firebase-config", ver
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "mapsCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

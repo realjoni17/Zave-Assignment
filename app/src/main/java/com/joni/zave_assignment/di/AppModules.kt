@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.joni.zave_assignment.data.dao.CachedStoreDao
 import com.joni.zave_assignment.data.dao.SearchHistoryDao
 import com.joni.zave_assignment.data.dao.UserDetailsDao
@@ -22,6 +24,10 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.joni.zave_assignment.R
+import com.joni.zave_assignment.data.repositories.RemoteConfigRepositoryImpl
+import com.joni.zave_assignment.domain.repositories.RemoteConfigRepository
+import com.joni.zave_assignment.ui.viewModels.SettingsViewModel
 
 val module = module {
     single { provideDataBase(get()) }
@@ -31,15 +37,17 @@ val module = module {
     single { providePlacesApi() }
     single { FirebaseAuth.getInstance() }
     single { FirebaseFirestore.getInstance() }
+    single { provideRemoteConfig() }
 
   single<NearbySearchRepository> { NearbySearchRepositoryImpl(get(),get(),get()) }
   single<FirebaseAuthRepository>{ FirebaseAuthRepositoryImpl(get(),get()) }
     single<LocationRepository>{ LocationRepositoryImpl(get(),get()) }
+    single<RemoteConfigRepository>{ RemoteConfigRepositoryImpl(get()) }
 
-
-    viewModel { SearchScreenViewModel(get()) }
+    viewModel { SearchScreenViewModel(get(),get(),) }
     viewModel { FirebaseAuthViewModel(get()) }
-    viewModel { HomeScreenViewModel(get(), get()) }
+    viewModel { HomeScreenViewModel(get(), get(),get()) }
+    viewModel { SettingsViewModel(get(),get(),get(), get()) }
 }
 
 //fun providesOkHttpClient() : OkHttpClient = OkHttpClient.Builder().addInterceptor()
@@ -60,3 +68,9 @@ fun provideUserDetailsDao(db : ZaveDatabase) : UserDetailsDao = db.userDetailsDa
 fun provideSerachHistoryDao(db: ZaveDatabase) : SearchHistoryDao = db.searchHistoryDao()
 
 fun provideCachedStoreDao(db : ZaveDatabase) : CachedStoreDao = db.cachedStoreDao()
+
+
+fun provideRemoteConfig(): FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance().also { rc ->
+    rc.setConfigSettingsAsync(remoteConfigSettings { minimumFetchIntervalInSeconds = 3600 })
+    rc.setDefaultsAsync(R.xml.remote_config_defaults)
+}

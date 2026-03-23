@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "cached_stores")
 data class CachedStoreEntity(
     @PrimaryKey val placeId: String,
-    val name: String,
-    val address: String,
-    val lat: Double,
-    val lng: Double,
+    val name: String?,
+    val address: String?,
+    val lat: Double?,
+    val lng: Double?,
     val rating: Float?,
     val userRatingsTotal: Int?,
     val types: String,

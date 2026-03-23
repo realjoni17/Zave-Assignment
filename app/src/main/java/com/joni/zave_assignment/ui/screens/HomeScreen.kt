@@ -152,7 +152,7 @@ fun HomeScreen(
 
             // ── Banner (Remote Config) ────────────────────────────────────────
             item {
-                if (/*state.remoteConfig.bannerMessage.isNotBlank()*/true) {
+                if (state.remoteConfig.bannerMessage.isNotBlank()) {
                     Box(
                         modifier = Modifier
                             .padding(horizontal = 20.dp)
@@ -184,7 +184,7 @@ fun HomeScreen(
                                 fontWeight = FontWeight.SemiBold
                             )
                             Text(
-                                text = "state.remoteConfig.bannerMessage",
+                                text = state.remoteConfig.bannerMessage,
                                 color = Color.White.copy(alpha = 0.9f),
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Medium,
@@ -320,12 +320,12 @@ fun HomeScreen(
                             .border(BorderStroke(1.dp, Teal500.copy(alpha = 0.3f)), RoundedCornerShape(20.dp))
                             .clickable {
                                 val loc = state.location
-                                if (loc != null) onSearch("state.remoteConfig.featuredCategory", loc)
+                                if (loc != null) onSearch(state.remoteConfig.featuredCategory, loc)
                             }
                             .padding(horizontal = 14.dp, vertical = 7.dp)
                     ) {
                         Text(
-                            text = "Featured: ${"state.remoteConfig.featuredCategory"}",
+                            text = "Featured: ${state.remoteConfig.featuredCategory}",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium,
                             color = Teal600
