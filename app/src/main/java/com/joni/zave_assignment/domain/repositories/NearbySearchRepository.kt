@@ -1,6 +1,9 @@
 package com.joni.zave_assignment.domain.repositories
 
+import com.joni.zave_assignment.data.entities.SearchHistoryEntity
 import com.joni.zave_assignment.domain.models.Place
+import kotlinx.coroutines.flow.Flow
+import com.joni.zave_assignment.utils.Result as Result
 
 interface NearbySearchRepository {
 
@@ -9,6 +12,9 @@ interface NearbySearchRepository {
         lng: Double,
         radiusMeters: Int,
         keyword: String
-    ) : List<Place>
+    ) : Result<List<Place>>
+
+    fun getRecentSearches(): Flow<List<SearchHistoryEntity>>
+    fun getCachedStores(query: String): Flow<List<Place>>
 
 }

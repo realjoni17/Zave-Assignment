@@ -16,9 +16,12 @@ local.properties
 .hotswan/
 
 
-# Firebase
 google-services.json
 GoogleService-Info.plist
+
+GoogleService-Info-*.plist          # if you have flavor variants
+app/google-services.json            # if it's placed inside app/
+ios/Runner/GoogleService-Info.plist # Flutter/React Native iOS path
 
 # Firebase local config
 .firebase/

@@ -75,6 +75,8 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.play.services.location)
 
     implementation("com.google.android.libraries.places:places:3.4.0")
 
@@ -103,5 +105,6 @@ dependencies {
 
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
 
-   // implementation("androidx.navigation:navigation-compose:2.9.7")
+    implementation("androidx.navigation:navigation-compose:2.9.7")
+    implementation("com.google.accompanist:accompanist-permissions:0.21.1-beta")
 }
